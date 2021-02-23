@@ -17,11 +17,10 @@ double LPF(double Rawdata, double gain)
     preLPF = LPF;
 }
 
-
-
 //Speed(m/s) ,MG2Torque(not final torque), Pitch(degree)
 void CrEstimater(double &Cr,double Speed, double MG2Torque,double Pitch)
 {
+
     double M = 700; //Mass
     double R = 0.24; //WheelRadius
     double dt = 0.1;
@@ -31,6 +30,10 @@ void CrEstimater(double &Cr,double Speed, double MG2Torque,double Pitch)
     double dVdt = Speed - preSpeed / dt; //Accel
     double Filtered_dVdt = LPF(dVdt, 0.2);
     Cr = ((MG2Torque * 4.113 / (M * R)) - Filtered_dVdt - G * sin(DegtoRad * Pitch)) / (G * cos(DegtoRad * Pitch));
+    if (Cr < 0)
+    {
+        Cr = 0.1;
+    }
     preSpeed = Speed;
 }
 
