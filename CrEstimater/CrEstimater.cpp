@@ -29,11 +29,8 @@ void CrEstimater(double &Cr,double Speed, double MG2Torque,double Pitch)
     const double DegtoRad = 0.01745329;
     static double preSpeed = 0;
     double dVdt = Speed - preSpeed / dt; //Accel
-    double FiltereddVdt = LPF(dVdt, 0.2);
-    Cr = ((MG2Torque * 4.113 / (M * R)) - dVdt - G * sin(DegtoRad * Pitch)) / (G * cos(DegtoRad * Pitch));
-
-
-
+    double Filtered_dVdt = LPF(dVdt, 0.2);
+    Cr = ((MG2Torque * 4.113 / (M * R)) - Filtered_dVdt - G * sin(DegtoRad * Pitch)) / (G * cos(DegtoRad * Pitch));
     preSpeed = Speed;
 }
 
